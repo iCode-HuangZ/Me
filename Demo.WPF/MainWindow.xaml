@@ -1,0 +1,35 @@
+﻿<cc:AdsorbWindow xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:cc="clr-namespace:System.Windows.ControlLibrary;assembly=System.Windows.ControlLibrary"
+                 xmlns:local="clr-namespace:Demo.WPF" x:Class="Demo.WPF.MainWindow" mc:Ignorable="d" Title="MainWindow" Height="350" Width="525" Background="YellowGreen">
+    <cc:AdsorbWindow.Resources>
+    
+    </cc:AdsorbWindow.Resources>
+    <Grid d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <WrapPanel Background="Gray">
+            <Button Content="显示时间">
+                <Button.InputBindings>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding ShowTime}" />
+                </Button.InputBindings>
+            </Button>
+            <Button Content="隐藏时间" Command="{Binding ShowTime.Cancel}" />
+        </WrapPanel>
+        <Grid Grid.Row="1">
+            <StackPanel>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <WrapPanel>
+                    <PasswordBox x:Name="password" Width="200"/>
+                    <Button Content="显示密码" Command="{Binding Path=ShowPassword}" CommandParameter="{Binding ElementName=password,Mode=OneWay}" />
+
+                </WrapPanel>
+                <TextBlock Text="{Binding Name}" />
+                <TextBlock Text="{Binding Time, Mode=OneWay}" />
+                <TextBlock Text="{Binding ShowTime.IsCompleted, Mode=OneWay}" />
+                <TextBlock Text="{Binding ShowTime.IsCancel, Mode=OneWay}" />
+                <TextBlock Text="{Binding ShowTime.IsFaulted, Mode=OneWay}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</cc:AdsorbWindow>
