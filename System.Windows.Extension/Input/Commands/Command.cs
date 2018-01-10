@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
-namespace System.Windows.Commands
+namespace System.Windows.Input.Commands
 {
-    public class Command :ICommand,ICommandState, IExecutionState, INotifyPropertyChanged
+    public class Command : ICommand, ICommandState, IExecutionState, INotifyPropertyChanged
     {
         private bool isCompleted;
         private bool isCancel;
         private bool isFaulted;
         private Exception exception;
 
-        
         /// <summary>
         /// 获取或设置一个值，该值指示发生异常时，默认的解决方案
         /// </summary>
@@ -32,12 +25,12 @@ namespace System.Windows.Commands
         /// <summary>
         /// 获取一个值，该值指示允许命令执行的委托
         /// </summary>
-        protected Func<object, Task<bool>> CanExecuteDelegate { get; }
-        
+        protected Func<object, bool> CanExecuteDelegate { get; }
+
         /// <summary>
         /// 获取或设置一个值，该值指示是否首次获取键盘焦点
         /// </summary>
-        protected bool IFirstKeyboardFocus { get; private set; }
+        protected bool IsFirstKeyboardFocus { get; private set; }
 
         /// <summary>
         /// 获取或设置一个值，该值指示是否允许执行命令
@@ -123,12 +116,12 @@ namespace System.Windows.Commands
         /// </summary>
         /// <param name="executeDelegate">执行委托</param>
         /// <param name="canExecuteDelegate">允许执行的委托</param>
-        public Command(Func<object, CancellationToken, Task> executeDelegate, Func<object, Task<bool>> canExecuteDelegate = null)
+        public Command(Func<object, CancellationToken, Task> executeDelegate, Func<object, bool> canExecuteDelegate = null)
         {
             ExecuteDelegate = executeDelegate;
             CanExecuteDelegate = canExecuteDelegate;
             IsCompleted = true;
-            IFirstKeyboardFocus = true;
+            IsFirstKeyboardFocus = true;
             Cancel = new CancelCommand(this);
         }
 
@@ -141,14 +134,14 @@ namespace System.Windows.Commands
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public bool CanExecute(object parameter)
+        public virtual bool CanExecute(object parameter)
         {
             // 仅在第一次获取键盘焦点时，执行 CanExecuteDelegate
-            if (IFirstKeyboardFocus)
+            if (IsFirstKeyboardFocus)
             {
                 // 备注：使用关键字 async 返回的 Task 会自动执行
-                CanExecuteTask(parameter);
-                IFirstKeyboardFocus = false;
+                IsCan = CanExecuteDelegate?.Invoke(parameter) ?? true;
+                IsFirstKeyboardFocus = false;
             }
             return Can();
         }
@@ -161,31 +154,7 @@ namespace System.Windows.Commands
         {
             return IsCan && IsCompleted;
         }
-
-        /// <summary>
-        /// 确定此命令是否可在其当前状态下执行的任务
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        private async Task CanExecuteTask(object parameter)
-        {
-            try
-            {
-                if (null == CanExecuteDelegate)
-                {
-                    IsCan = true;
-                    return;
-                }
-                IsCan = await CanExecuteDelegate.Invoke(parameter);
-                CommandManager.InvalidateRequerySuggested();
-            }
-            catch
-            {
-                IsCan = false;
-            }
-        }
-
-
+        
         /// <summary>
         /// 在调用此命令时要调用的方法。
         /// 备注：请在此方法的最后一定加上 OnExecuted
@@ -202,7 +171,6 @@ namespace System.Windows.Commands
             try
             {
                 await ExecuteDelegate.Invoke(parameter, cancellationToken);
-                await CanExecuteTask(parameter);
                 IsCancel = cancellationToken.IsCancellationRequested;
             }
             catch (OperationCanceledException)
@@ -227,13 +195,13 @@ namespace System.Windows.Commands
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        
+
         /// <summary>
         /// 引发 Executed 事件
         /// </summary>
-        protected virtual void OnExecuted()
+        protected void OnExecuted()
         {
-            Executed?.Invoke(this, new ExecutedEventArgs(this,Exception));
+            Executed?.Invoke(this, new ExecutedEventArgs(this, Exception));
         }
     }
 }

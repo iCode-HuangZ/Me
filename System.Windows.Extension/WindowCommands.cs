@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Commands;
+using System.Windows.Input.Commands;
 using System.Windows.Input;
 
 namespace System.Windows
@@ -41,12 +41,12 @@ namespace System.Windows
 
         static WindowCommands()
         {
-            var canExecute = new Func<object, Task<bool>>(WindowCanExecuteDelegate);
+            var canExecute = new Func<object, bool>(WindowCanExecuteDelegate);
             Minimize = new Command(MinimizeExecuteDelegate, canExecute);
-            Maximize = new Command(MaximizeExecuteDelegate, canExecute);
+            Maximize = new Command(MaximizeExecuteDelegate,canExecute);
             Restore = new Command(RestoreExecuteDelegate, canExecute);
             Close = new Command(CloseExecuteDelegate, canExecute);
-            ShowSystemMenu = new Command(ShowSystemMenuExecuteDelegate, canExecute);
+            ShowSystemMenu = new Command(ShowSystemMenuExecuteDelegate);
         }
 
         private static async Task ShowSystemMenuExecuteDelegate(object o, CancellationToken cancellationToken)
@@ -81,9 +81,8 @@ namespace System.Windows
             SystemCommands.MinimizeWindow((Window) o);
         }
 
-        private static async Task<bool> WindowCanExecuteDelegate(object o)
+        private static bool WindowCanExecuteDelegate(object o)
         {
-            await Task.Run(() => { });
             return o is Window;
         }
     }

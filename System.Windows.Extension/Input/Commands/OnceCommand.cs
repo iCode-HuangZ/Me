@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
-namespace System.Windows.Commands
+namespace System.Windows.Input.Commands
 {
     /// <summary>
     /// 仅允许执行一次的命令
@@ -28,7 +23,7 @@ namespace System.Windows.Commands
             }
         }
 
-        public OnceCommand(Func<object, CancellationToken, Task> executeDelegate,Func<object,Task<bool>> canExecuteDelegate) : base(executeDelegate, canExecuteDelegate)
+        public OnceCommand(Func<object, CancellationToken, Task> executeDelegate,Func<object,bool> canExecuteDelegate) : base(executeDelegate, canExecuteDelegate)
         {
             Executed += OnceCommand_Executed;
         }

@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Commands;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Input.Commands;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -27,7 +27,6 @@ namespace Demo.WPF
         public MainWindow()
         {
             InitializeComponent();
-           
             DataContext = new MainViewModel();
         }
 
@@ -64,9 +63,8 @@ namespace Demo.WPF
             ShowPassword = new Command(ShowPasswordExecuteDelegate,ShowPasswordCanExecuteDelegate);
         }
 
-        private async Task<bool> ShowPasswordCanExecuteDelegate(object o)
+        private bool ShowPasswordCanExecuteDelegate(object o)
         {
-            await Task.Run(() => { });
             return o is PasswordBox;
         }
 

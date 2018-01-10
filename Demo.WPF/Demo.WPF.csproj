@@ -97,6 +97,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\System.Extension\System.Extension.csproj">
+      <Project>{3F2FC8DF-B0A4-426E-B935-3B5ABC6C38D9}</Project>
+      <Name>System.Extension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\System.Windows.ControlLibrary\System.Windows.ControlLibrary.csproj">
       <Project>{0d30e91c-a224-4962-b2f4-9fc4e886c5f5}</Project>
       <Name>System.Windows.ControlLibrary</Name>

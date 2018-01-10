@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace System.Windows.Commands
+﻿namespace System.Windows.Input.Commands
 {
     /// <summary>
     /// 命令执行完毕后

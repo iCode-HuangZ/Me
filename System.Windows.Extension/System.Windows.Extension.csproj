@@ -46,12 +46,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CancelCommand.cs" />
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\ExecutedEventArgs.cs" />
-    <Compile Include="Commands\ICommandState.cs" />
-    <Compile Include="Commands\IExecutionState.cs" />
-    <Compile Include="Commands\OnceCommand.cs" />
+    <Compile Include="Input\Commands\CancelCommand.cs" />
+    <Compile Include="Input\Commands\Command.cs" />
+    <Compile Include="Input\Commands\ExecutedEventArgs.cs" />
+    <Compile Include="Input\Commands\ICommandState.cs" />
+    <Compile Include="Input\Commands\IExecutionState.cs" />
+    <Compile Include="Input\Commands\OnceCommand.cs" />
     <Compile Include="Controls\DecimalTextBoxInputFilter.cs" />
     <Compile Include="Controls\Rules\InputRule.cs" />
     <Compile Include="Controls\TextBoxInputFilter.cs" />
